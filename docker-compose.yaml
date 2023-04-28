@@ -1,0 +1,31 @@
+version: '3'
+
+volumes:
+  db:
+    driver: local
+
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.${ENV}
+    ports:
+      -  "3000:3000"
+    container_name: visortest_frontend
+    depends_on:
+      - api
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.${ENV}
+    ports:
+      -  "4369:4369"
+    container_name: visortest_backend
+    depends_on:
+      - db
+  db:
+    volumes:
+      - db:/data
+    image: mongo:latest
+    ports:
+      - "27017:27017"  

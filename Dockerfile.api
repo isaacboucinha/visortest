@@ -1,0 +1,21 @@
+# Pull the Node image from Docker Hub
+FROM node:18
+
+# Create a dedicated user for running the application
+RUN adduser --disabled-login --gecos "" appuser
+
+# Set the user for RUN, CMD or ENTRYPOINT calls from now on
+USER appuser
+
+# Configure the working directory
+WORKDIR /home/appuser
+
+# Copy the main application to working directory
+COPY --chown=appuser . ./
+
+# Install dependencies
+RUN yarn install
+
+
+# Start the React app
+CMD ["node","server.js"]
