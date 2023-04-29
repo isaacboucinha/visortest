@@ -5,7 +5,7 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 # Ignore vscode remote container configs
-/.devcontainer
+.devcontainer
 
 # Ignore vscode launch settings
 .vscode
