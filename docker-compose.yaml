@@ -9,8 +9,10 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile.${ENV}
+    environment:
+      - PORT=${APP_PORT}
     ports:
-      -  "3000:3000"
+      -  "${APP_PORT}:${APP_PORT}"
     container_name: visortest_frontend
     depends_on:
       - api
@@ -18,8 +20,10 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile.${ENV}
+    environment:
+      - PORT=${API_PORT}
     ports:
-      -  "4369:4369"
+      -  "${API_PORT}:${API_PORT}"
     container_name: visortest_backend
     depends_on:
       - db
@@ -27,5 +31,6 @@ services:
     volumes:
       - app-mongodata:/data
     image: mongo:5.0
+    container_name: visortest_db
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:${DB_PORT}"

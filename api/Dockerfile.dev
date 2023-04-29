@@ -16,8 +16,8 @@ COPY --chown=appuser . ./
 # Install dependencies
 RUN npm install
 
-# Expose port 4369 to the Docker host
-EXPOSE 4369
+# Expose port to the Docker host
+EXPOSE $PORT
 
 # Start the server app
-CMD ["npm","start"]
+CMD ["npm", "start"]
