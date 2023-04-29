@@ -1,5 +1,5 @@
 # Pull the Node image from Docker Hub
-FROM node:18
+FROM node:20
 
 # Create a dedicated user for running the application
 RUN adduser --disabled-login --gecos "" appuser
@@ -14,8 +14,10 @@ WORKDIR /home/appuser
 COPY --chown=appuser . ./
 
 # Install dependencies
-RUN yarn install
+RUN npm install
 
+# Expose port 4369 to the Docker host
+EXPOSE 4369
 
-# Start the React app
-CMD ["node","server.js"]
+# Start the server app
+CMD ["npm","start"]

@@ -1,7 +1,7 @@
-version: '3'
+version: '3.8'
 
 volumes:
-  db:
+  app-mongodata:
     driver: local
 
 services:
@@ -25,7 +25,7 @@ services:
       - db
   db:
     volumes:
-      - db:/data
-    image: mongo:latest
+      - app-mongodata:/data
+    image: mongo:5.0
     ports:
-      - "27017:27017"  
+      - "5432:5432"
