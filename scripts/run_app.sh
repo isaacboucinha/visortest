@@ -2,7 +2,7 @@
 
 if test -f "../.env"; then
   echo "Loading env file..."
-  export $(cat ../.env | xargs)
+  export $(grep -v '^#' ../.env | xargs)
 fi
 
 echo "Starting web app application..."

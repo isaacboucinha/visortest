@@ -1,0 +1,4 @@
+# ignore folder with no source code
+node_modules
+build
+scripts

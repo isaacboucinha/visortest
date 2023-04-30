@@ -9,3 +9,6 @@
 
 # Ignore vscode launch settings
 .vscode
+
+# Ignore local .env file
+/.env
