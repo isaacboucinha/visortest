@@ -5,6 +5,7 @@
   "description": "Server application for the Visor.ai test chatbot",
   "main": "index.js",
   "scripts": {
+    "prepare": "cd ../ && husky install ./api/.husky",
     "clean": "rimraf build/*",
     "tsc": "tsc",
     "copy-assets": "ts-node scripts/copy_assets",
