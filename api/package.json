@@ -5,7 +5,6 @@
   "description": "Server application for the Visor.ai test chatbot",
   "main": "index.js",
   "scripts": {
-    "prepare": "cd ../ && husky install ./api/.husky",
     "clean": "rimraf build/*",
     "tsc": "tsc",
     "copy-assets": "ts-node scripts/copy_assets",
@@ -58,10 +57,5 @@
     "shelljs": "^0.8.5",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run prettier:fix && npm run lint:fix"
-    }
   }
 }
