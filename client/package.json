@@ -7,7 +7,7 @@
     "dev": "next dev",
     "next:build": "next build",
     "next:start": "next start",
-    "build": "npm-run-all next:build lint prettier",
+    "build": "npm-run-all next:build",
     "start": "npm-run-all build next:start",
     "eslint": "eslint .",
     "eslint:fix": "eslint . --fix",

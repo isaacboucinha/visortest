@@ -12,3 +12,6 @@
 
 # Ignore local .env file
 /.env
+
+# Ignore local todo file
+todo.md

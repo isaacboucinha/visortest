@@ -1,14 +1,20 @@
 version: '3.8'
 
 volumes:
-  app-mongodata:
+  mongodb-data:
     driver: local
+
+networks:
+  local:
+    driver: bridge
 
 services:
   client:
     build:
       context: ./client
       dockerfile: Dockerfile.${ENV}
+    env_file:
+      - ./.env
     environment:
       - PORT=${APP_PORT}
     ports:
@@ -16,21 +22,34 @@ services:
     container_name: visortest_frontend
     depends_on:
       - api
+    networks:
+      - local
   api:
     build:
       context: ./api
       dockerfile: Dockerfile.${ENV}
+    env_file:
+      - ./.env
     environment:
       - PORT=${API_PORT}
+      - DEBUG=app:*
     ports:
       -  "${API_PORT}:${API_PORT}"
     container_name: visortest_backend
+    links:
+      - "db:mongodb"
     depends_on:
       - db
+    networks:
+      - local
   db:
     volumes:
-      - app-mongodata:/data
+      - mongodb-data:/data/db
     image: mongo:5.0
     container_name: visortest_db
     ports:
       - "${DB_PORT}:${DB_PORT}"
+    env_file:
+      - ./.env
+    networks:
+      - local

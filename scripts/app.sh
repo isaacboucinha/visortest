@@ -1,9 +1,7 @@
 #!/bin/bash
 
-if test -f "../.env"; then
-  echo "Loading env file..."
-  export $(grep -v '^#' ../.env | xargs)
-fi
+# load env file
+sh ./_load_env.sh
 
 echo "Starting web app application..."
 

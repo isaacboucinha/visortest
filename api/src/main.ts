@@ -2,13 +2,15 @@ import express from "express";
 import type { Response, Request, NextFunction } from "express";
 import path from "path";
 import createError from "http-errors";
-import type { HttpError } from "http-errors";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
+import cors from "cors";
 
-import indexRouter from "./routes/index";
+import errorHandler from "./middleware/errorHandler";
 
-// app.use("/", indexRouter);
+import UserController from "./controllers/user.controller";
+import PromptController from "./controllers/prompt.controller";
+import AuthController from "./controllers/auth.controller";
 
 /**
  * The main app class
@@ -19,7 +21,8 @@ export class Main {
   public app: express.Application;
 
   /**
-   * Constructor.
+   * Initializes the express app, configures middleware
+   * and controllers
    *
    * @class Main
    * @constructor
@@ -28,35 +31,33 @@ export class Main {
     // create express application
     this.app = express();
 
-    // configure application
-    this.config();
+    // configure application middleware
+    this.configMiddleware();
 
-    // add routes
-    this.routes();
+    // add controllers
+    this.configControllers();
 
-    // configure api routes
-    this.api_routes();
+    // add further error handling middleware
+    this.configErrorHandling();
   }
 
   /**
-   * Create REST API routes
+   * Configures necessary middleware
    *
    * @class App
-   * @method api
+   * @method configMiddleware
+   * @returns void
    */
-  public api_routes(): void {
-    // empty for now
-  }
+  public configMiddleware(): void {
+    // configure logger
+    this.app.use(logger("dev"));
 
-  /**
-   * Configures application (adds all necessary middleware)
-   *
-   * @class App
-   * @method config
-   */
-  public config(): void {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
+
+    // add cors support
+    this.app.use(cors());
+
     // add static paths
     this.app.use(express.static(path.join(__dirname, "public")));
 
@@ -64,23 +65,31 @@ export class Main {
     this.app.set("views", path.join(__dirname, "views"));
     this.app.set("view engine", "jade");
 
-    // configure logger
-    this.app.use(logger("dev"));
-
     // add cookie parsing middleware
     this.app.use(cookieParser());
   }
 
   /**
-   * Associates routers to their correct route
+   * Sets up app controllers and routing associations
    *
-   * @class Server
-   * @method routes
+   * @class App
+   * @method configControllers
    * @return void
    */
-  private routes(): void {
-    this.app.use("/", indexRouter);
+  private configControllers(): void {
+    this.app.use("/users", new UserController().router);
+    this.app.use("/prompt", new PromptController().router);
+    this.app.use("/auth", new AuthController().router);
+  }
 
+  /**
+   * Configures error handling middleware.
+   *
+   * @class App
+   * @method configErrorHandling
+   * @return void
+   */
+  public configErrorHandling(): void {
     // catch 404 and forward to error handler
     this.app.use(function (
       _req: Request,
@@ -92,19 +101,6 @@ export class Main {
     });
 
     // error handler
-    this.app.use(function (
-      err: HttpError,
-      req: Request,
-      res: Response,
-      _next: NextFunction
-    ): void {
-      // set locals, only providing error in development
-      res.locals.message = err.message;
-      res.locals.error = req.app.get("env") === "development" ? err : {};
-
-      // render the error page
-      res.status(err.status ?? 500);
-      res.render("error");
-    });
+    this.app.use(errorHandler);
   }
 }

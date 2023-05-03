@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# install server app
+# install server app dependencies
 ( cd ../api ; npm install )
 
-# install web app
+# install web app dependencies
 ( cd ../client ; npm install )
