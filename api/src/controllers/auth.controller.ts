@@ -24,7 +24,7 @@ export default class AuthController {
   private initialize(): void {
     this.router.post("/", this.login);
     this.router.get("/refresh", this.refreshToken);
-    this.router.post("/logout", this.logout);
+    this.router.get("/logout", this.logout);
   }
 
   private login(req: Request, res: Response): void {
@@ -34,10 +34,11 @@ export default class AuthController {
         if (authInfo === null) {
           res.status(401).json({ message: "Unauthorized" });
         } else {
-          res.cookie("jwt", authInfo.refreshToken, {
+          res.cookie("jwt", authInfo.accessToken, {
             httpOnly: true,
-            secure: true,
-            sameSite: false
+            // secure: true, // TODO readd this later
+            sameSite: false,
+            maxAge: 1000 * 60 * 60 * 24 * 7
           });
 
           res.send({ authInfo });
@@ -77,7 +78,7 @@ export default class AuthController {
     } else {
       res.clearCookie("jwt", {
         httpOnly: true,
-        secure: true,
+        // secure: true, TODO readd this later
         sameSite: false
       });
       res.status(200).json({ message: "User logged out" });

@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 :root {
+  --base-background-color: #ffffff;
+
   --primary-background-color: #f3f6f5;
   --secondary-background-color: #85c1b7;
   --tertiary-background-color: #427087;
@@ -25,6 +27,6 @@
 }
 
 body {
-  background-color: var(--primary-background-color);
+  background-color: var(--base-background-color);
   font-family: 'Nunito Sans', sans-serif;
 }

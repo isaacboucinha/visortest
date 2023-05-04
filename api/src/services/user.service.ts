@@ -14,7 +14,14 @@ export async function getUser(userId: string): Promise<IUser | null> {
   return await User.findById(userId).select("-password");
 }
 
-export async function getUserByEmail(userEmail: string): Promise<IUser | null> {
+export async function getUserByEmail(
+  userEmail: string,
+  includePassword = false
+): Promise<IUser | null> {
+  if (includePassword) {
+    return await User.findOne({ email: userEmail });
+  }
+
   return await User.findOne({ email: userEmail }).select("-password");
 }
 

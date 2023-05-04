@@ -24,7 +24,7 @@ const generateAccessToken = (userEmail: string): string => {
       }
     },
     accessTokenSecret,
-    { expiresIn: "30m" }
+    { expiresIn: "7d" }
   );
 };
 
@@ -43,7 +43,7 @@ const generateRefreshToken = (userEmail: string): string => {
 export async function loginUser(user: IUser): Promise<IAuth | null> {
   if (user.password === undefined || user.email === undefined) return null;
 
-  const existingUser = await getUserByEmail(user.email);
+  const existingUser = await getUserByEmail(user.email, true);
 
   if (existingUser?.active === true && existingUser?.password !== undefined) {
     const passwordsMatch = await bcrypt.compare(

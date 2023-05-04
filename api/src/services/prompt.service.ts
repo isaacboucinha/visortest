@@ -86,8 +86,8 @@ export async function getResponseForPrompt(
           role: userRole
         };
 
-        await MessageService.createMessage(newBotMessage);
         await MessageService.createMessage(newUserMessage);
+        await MessageService.createMessage(newBotMessage);
 
         // send back a response prompt
         return { content, conversationId: conversation.id };

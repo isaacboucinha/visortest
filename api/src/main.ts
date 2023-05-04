@@ -11,6 +11,7 @@ import errorHandler from "./middleware/errorHandler";
 import UserController from "./controllers/user.controller";
 import PromptController from "./controllers/prompt.controller";
 import AuthController from "./controllers/auth.controller";
+import ConversationController from "./controllers/conversation.controller";
 
 /**
  * The main app class
@@ -56,7 +57,13 @@ export class Main {
     this.app.use(express.urlencoded({ extended: false }));
 
     // add cors support
-    this.app.use(cors());
+    this.app.use(
+      cors({
+        // TODO read allowed origins from env file
+        origin: "http://localhost:3000",
+        credentials: true
+      })
+    );
 
     // add static paths
     this.app.use(express.static(path.join(__dirname, "public")));
@@ -78,6 +85,7 @@ export class Main {
    */
   private configControllers(): void {
     this.app.use("/users", new UserController().router);
+    this.app.use("/conversations", new ConversationController().router);
     this.app.use("/prompt", new PromptController().router);
     this.app.use("/auth", new AuthController().router);
   }

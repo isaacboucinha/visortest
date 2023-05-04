@@ -2,6 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import type { Model, Document } from "mongoose";
 
 import type { IUser } from "../types/user.type";
+import type { IMessage } from "../types/message.type";
 
 // declare conversation document type
 interface IConversationDocument extends Document {
@@ -9,6 +10,7 @@ interface IConversationDocument extends Document {
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
+  messages: IMessage[];
 }
 
 type ConversationModel = Model<IConversationDocument, unknown, unknown>;
@@ -28,8 +30,14 @@ const conversationSchema: Schema = new Schema<
       default: true
     }
   },
-  { timestamps: true }
+  { toJSON: { virtuals: true }, timestamps: true }
 );
+
+conversationSchema.virtual("messages", {
+  ref: "Message",
+  localField: "_id",
+  foreignField: "conversation"
+});
 
 /**
  * Conversation model type

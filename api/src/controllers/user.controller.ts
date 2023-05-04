@@ -23,10 +23,12 @@ export default class UserController {
   }
 
   private initialize(): void {
+    this.router.post("/", this.createUser);
+
     this.router.use(authenticator);
     this.router.get("/", this.getAllUsers);
+    this.router.get("/me", this.getSelf);
     this.router.get("/:userId", this.getUser);
-    this.router.post("/", this.createUser);
   }
 
   private getAllUsers(_req: Request, res: Response): void {
@@ -67,5 +69,10 @@ export default class UserController {
         // TODO err.message might send sensitive info
         res.status(500).send({ message: err.message });
       });
+  }
+
+  private getSelf(req: Request, res: Response): void {
+    const user = req.body.user;
+    res.status(200).send(user);
   }
 }

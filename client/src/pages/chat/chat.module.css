@@ -1,0 +1,7 @@
+.prompt_container {
+}
+
+.chat_container {
+  overflow-y: scroll;
+  width: 75%;
+}
